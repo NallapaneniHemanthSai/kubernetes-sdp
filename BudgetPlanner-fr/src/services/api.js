@@ -20,10 +20,16 @@ class ApiService {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText || `HTTP error! status: ${response.status}`);
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        try {
+          const errorText = await response.text();
+          errorMessage = errorText || errorMessage;
+        } catch (e) {
+          // ignore parsing error
+        }
+        throw new Error(errorMessage);
       }
 
       // Handle different response types
@@ -34,7 +40,12 @@ class ApiService {
         return await response.text();
       }
     } catch (error) {
-      console.error('API request failed:', error);
+      // Improved error logging
+      if (error instanceof TypeError) {
+        console.error('Network error or CORS issue:', error);
+      } else {
+        console.error('API request failed:', error.message);
+      }
       throw error;
     }
   }
@@ -47,9 +58,10 @@ class ApiService {
     });
   }
 
-  async login(username, password) {
-    return this.request(`/user-api/login/${username}/${password}`, {
-      method: 'GET',
+  async login(user) {
+    return this.request(`/user-api/login`, {
+      method: 'POST',
+      body: JSON.stringify(user),
     });
   }
 
