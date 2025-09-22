@@ -23,16 +23,13 @@ const Login = ({ onLoginSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    
-    if (!username || !password) {
+    if (!user.username || !user.password) {
       setError('Please enter username and password');
       return;
     }
-
     setLoading(true);
     try {
       const result = await login(user);
-      
       if (result.success) {
         onLoginSuccess();
       } else {

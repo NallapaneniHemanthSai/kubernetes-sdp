@@ -28,11 +28,10 @@ const Register = ({ onRegisterSuccess }) => {
       const userData = {
         username,
         email,
-        password
+        password,
+        role: 'user' // Default role
       };
-      
       const result = await register(userData);
-      
       if (result.success) {
         onRegisterSuccess();
       } else {

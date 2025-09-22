@@ -3,14 +3,21 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import AdminDashboard from './components/AdminDashboard';
 
 function AppContent() {
   const [currentPage, setCurrentPage] = useState('login');
   const { user } = useAuth();
 
-  // If user is logged in, show dashboard
+  // If user is logged in, show dashboard based on role
   if (user) {
-    return <Dashboard />;
+    // Support both 'role' and 'Role' (case-insensitive)
+    const userRole = user.role || user.Role || user.role?.toLowerCase() || user.Role?.toLowerCase();
+    if (userRole === 'admin') {
+      return <AdminDashboard />;
+    } else {
+      return <Dashboard />;
+    }
   }
 
   // If user is not logged in, show login/register pages

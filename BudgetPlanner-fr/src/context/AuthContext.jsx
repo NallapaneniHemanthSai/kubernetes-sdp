@@ -25,15 +25,16 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const login = async (username, password) => {
+  // Accepts a user object { username, password }
+  const login = async (userObj) => {
     try {
       setLoading(true);
-      const userData = await apiService.login(username, password);
-      
+      const userData = await apiService.login(userObj);
+      // Debug log to check user object and role
+      console.log('Login response userData:', userData);
       // Save user data
       setUser(userData);
       sessionStorage.setItem('user', JSON.stringify(userData));
-      
       return { success: true, user: userData };
     } catch (error) {
       console.error('Login failed:', error);
