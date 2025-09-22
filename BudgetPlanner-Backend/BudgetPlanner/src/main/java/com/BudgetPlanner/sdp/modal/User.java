@@ -29,15 +29,13 @@ public class User {
 	@Column(name = "role", nullable = false)
 	String role;
 	
-	
-	public User(Long id,String username,String email,String password){
-		this.id=id;
-		this.username=username;
-		this.email=email;
-		this.password=password;
-		this.role="user";
+	public void setRole(String role) {
+		this.role = role;
 	}
-	public User() {}
+	
+	public String getRole() {
+		return role;
+	}
 	public Long getId() {
 		return id;
 	}
